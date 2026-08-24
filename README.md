@@ -1,6 +1,6 @@
-Master Thesis
+# MSc Thesis Project
 
-*Automated Business Insight Generation Using Large Language Models with User-in-the-Loop Evaluation*
+## Automated Business Insight Generation Using Large Language Models with User-in-the-Loop Evaluation
 
 The project investigates how Large Language Models can support the interpretation of structured business data by transforming statistical EDA outputs into readable analytical narratives.
 
@@ -12,13 +12,13 @@ The current prototype focuses on three main stages:
 
 ------------------------------
 
-Main Features and Steps that the app follows:
+### Main Features and Steps that the app follows:
 
-1. CSV Upload
+### 1. CSV Upload
 
 Users can upload a structured CSV dataset directly through the Streamlit interface.
 
-2. Analytical Context
+### 2. Analytical Context
 
 Before generating insights, the user provides:
 
@@ -29,7 +29,7 @@ Before generating insights, the user provides:
 
 This information is included in the LLM prompt so that the generated output is not based solely on statistical results.
 
-3. Automated Exploratory Data Analysis
+### 3. Automated Exploratory Data Analysis
 
 The EDA engine currently performs seven types of analysis.
 
@@ -42,7 +42,7 @@ The EDA engine currently performs seven types of analysis.
 - Detection of Outliers (treated as observations that may require further investigation)
 
 
-4. LLM-Generated Insights
+### 4. LLM-Generated Insights
 
 The EDA package is combined with the user's analytical context and sent to the configured Gemini model using the Google GenAI SDK.
 
@@ -51,7 +51,7 @@ The model is instructed to return exactly three insights:
 2. Anomaly / Risk
 3. Data Quality/ Limitation
 
-5. Human Evaluation
+### 5. Human Evaluation
 
 Generated insights are presented to the user for evaluation.
 
@@ -66,7 +66,7 @@ Evaluation results are stored in the local SQLite database and linked to the cor
 
 --------------------------
 
-Main Streamlit application --> app.py
+## Main Streamlit application --> app.py
 
 Responsible for:
 
@@ -81,7 +81,7 @@ modules/eda_engine.py
 
 -----------------------------
 
-Requirements
+### Requirements
 
 The project was developed and tested using:
 
@@ -99,90 +99,86 @@ requirements.txt
 
 ------------------------------
 
-Installation
+### Installation
 1. Clone the repository
+```
 git clone <repository-url>
 cd <repository-folder>
+```
 2. Create a Python virtual environment
 
 Linux/macOS:
 
+```
 python3 -m venv .venv
-
+```
 Activate it:
 
+```
 source .venv/bin/activate
-
+```
 Windows:
 
+```
 python -m venv .venv
-
+```
 Activate it:
-
+```
 .venv\Scripts\activate
+```
 3. Install dependencies
+```
 pip install -r requirements.txt
-API Configuration
+```
+
+### API Configuration
 
 The application requires access to the Google Gemini API.
 
 Create a .env file in the root directory:
+
+```
 
 DISS/
 ├── .env
 ├── app.py
 └── ...
 
-Add your Google API key:
+```
 
-GOOGLE_API_KEY=your_api_key_here
-
-The .env file must not be committed to GitHub.
-
-Add the following to .gitignore:
-
-.env
-.venv/
-__pycache__/
-*.pyc
-
-
-
-Running the Application
+### Running the Application
 
 From the project directory, activate the virtual environment:
 
+```
 source .venv/bin/activate
-
+```
 
 Then start Streamlit:
-
+```
 streamlit run app.py
-
-
+```
 Alternatively:
-
+```
 python -m streamlit run app.py
-
+```
 
 Streamlit will normally make the application available locally 
 
-User Steps to Follow
+### User Steps to Follow
 
-http://localhost:8501
-
-1.Start the Streamlit application.
-2.Upload a CSV dataset.
-3.Enter the assigned Participant ID.
-4.Select the appropriate business domain.
-5.Specify the target audience.
-6.Describe what you are looking for in the dataset.
-7.Select Generate Insights.
-8.The application performs the EDA.
-9.The structured EDA results are sent to the LLM.
-10.Three generated insights are displayed.
-11.Evaluate each insight using Accept, Reject, or Edit.
-12.Collection of data is completed!
+1. Start the Streamlit application.
+2. Upload a CSV dataset.
+3. Enter the assigned Participant ID.
+4. Select the appropriate business domain.
+5. Specify the target audience.
+6. Describe what you are looking for in the dataset.
+7. Select Generate Insights.
+8. The application performs the EDA.
+9. The structured EDA results are sent to the LLM.
+10. Three generated insights are displayed.
+11. Evaluate each insight using Accept, Reject, or Edit.
+12. Collection of data is completed!
 
 
-The application is designed as a research prototype rather than a production Business Intelligence platform.
+_The application is designed as a research prototype rather than a production Business Intelligence platform._
