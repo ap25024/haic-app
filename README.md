@@ -85,13 +85,13 @@ modules/eda_engine.py
 
 The project was developed and tested using:
 
-Python 3.12
-Streamlit
-pandas
-NumPy
-Google GenAI SDK
-python-dotenv
-SQLite
+- Python 3.12
+- Streamlit
+- pandas
+- NumPy
+- Google GenAI SDK
+- python-dotenv
+- SQLite
 
 The complete Python dependency list is available in:
 
