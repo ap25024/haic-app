@@ -91,7 +91,7 @@ if submit_button:
         for error in validation_errors:
             st.error(error)
     else:
-         try:
+        try:
             df = pd.read_csv(uploaded_file)
 
             if df.empty or len(df.columns) == 0:
