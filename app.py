@@ -26,6 +26,8 @@ def reset_analysis_state():
     st.session_state["current_insight_index"] = 0
     st.session_state["insight_start_times"] = {}
     st.session_state["evaluated_insight_ids"] = set()
+    st.session_state["reviewed_insights"] = []
+    st.session_state["analysis_context"] = None
 
 
     for key in list(st.session_state.keys()):
@@ -52,6 +54,10 @@ if "insight_start_times" not in st.session_state:
     st.session_state["insight_start_times"] = {}
 if "evaluated_insight_ids" not in st.session_state:
     st.session_state["evaluated_insight_ids"] = set()
+if "reviewed_insights" not in st.session_state:
+    st.session_state["reviewed_insights"] = []
+if "analysis_context" not in st.session_state:
+    st.session_state["analysis_context"] = None
 
 # SECTION 1: DATA UPLOAD & CONTEXT
 st.header("1. Upload Data & Define Context")
@@ -176,6 +182,13 @@ if submit_button:
                 st.session_state["current_insight_index"] = 0
                 st.session_state["insight_start_times"] = {}
                 st.session_state["evaluated_insight_ids"] = set()
+                st.session_state["reviewed_insights"] = []
+                st.session_state["analysis_context"] = {
+                    "dataset_name": uploaded_file.name,
+                    "domain": domain,
+                    "audience": audience,
+                    "goal": goal.strip(),
+                }
 
                 st.info(
                     "Context and analysis saved to the database. "
@@ -238,6 +251,91 @@ if generation_is_ready:
                 "Evaluation completed. All three insights have been "
                 "submitted successfully."
             )
+
+            st.divider()
+            st.header("3. Reviewed Insight Summary")
+            st.write(
+                "This summary contains the insights you accepted or edited. "
+                "Rejected insights have been excluded."
+            )
+
+            analysis_context = (
+                st.session_state.get("analysis_context") or {}
+            )
+            if analysis_context:
+                st.markdown(
+                    f"**Dataset:** {analysis_context['dataset_name']}  \n"
+                    f"**Domain:** {analysis_context['domain']}  \n"
+                    f"**Target audience:** {analysis_context['audience']}  \n"
+                    f"**Analysis goal:** {analysis_context['goal']}"
+                )
+
+            retained_insights = [
+                reviewed
+                for reviewed in st.session_state["reviewed_insights"]
+                if reviewed["action"] in ("Accept", "Edit")
+            ]
+
+            if retained_insights:
+                report_lines = ["REVIEWED INSIGHT SUMMARY"]
+                if analysis_context:
+                    report_lines.extend(
+                        [
+                            f"Dataset: {analysis_context['dataset_name']}",
+                            f"Domain: {analysis_context['domain']}",
+                            (
+                                "Target audience: "
+                                f"{analysis_context['audience']}"
+                            ),
+                            f"Analysis goal: {analysis_context['goal']}",
+                            "",
+                        ]
+                    )
+
+                for report_number, reviewed in enumerate(
+                    retained_insights,
+                    start=1,
+                ):
+                    st.subheader(
+                        f"{report_number}. {reviewed['title']}"
+                    )
+                    st.caption(
+                        f"{reviewed['type']} | {reviewed['action']}"
+                    )
+                    st.write(reviewed["final_narrative"])
+
+                    if reviewed.get("supporting_evidence"):
+                        st.write(
+                            "**Supporting evidence:**",
+                            reviewed["supporting_evidence"],
+                        )
+
+                    report_lines.extend(
+                        [
+                            f"{report_number}. {reviewed['title']}",
+                            f"Type: {reviewed['type']}",
+                            f"Review status: {reviewed['action']}",
+                            f"Narrative: {reviewed['final_narrative']}",
+                        ]
+                    )
+                    if reviewed.get("supporting_evidence"):
+                        report_lines.append(
+                            "Supporting evidence: "
+                            f"{reviewed['supporting_evidence']}"
+                        )
+                    report_lines.append("")
+
+                st.info(
+                    f"{len(retained_insights)} of {total_insights} "
+                    "generated insights were retained after review."
+                )
+                with st.expander("Copyable report text"):
+                    st.code("\n".join(report_lines), language=None)
+            else:
+                st.warning(
+                    "No insights were retained. All generated insights were "
+                    "rejected during the review."
+                )
         else:
             insight = insights[current_index]
             insight_number = insight["insight_id"]
@@ -318,6 +416,39 @@ if generation_is_ready:
                                 )
 
                                 if success:
+                                    supporting_evidence = (
+                                        insight.get("supporting_evidence")
+                                        or insight.get("evidence")
+                                        or insight.get("support")
+                                    )
+                                    reviewed_insights = list(
+                                        st.session_state[
+                                            "reviewed_insights"
+                                        ]
+                                    )
+                                    reviewed_insights.append(
+                                        {
+                                            "database_insight_id": (
+                                                database_insight_id
+                                            ),
+                                            "insight_number": insight_number,
+                                            "title": insight["title"],
+                                            "type": insight["type"],
+                                            "action": action_ui,
+                                            "final_narrative": (
+                                                final_edit.strip()
+                                                if action_ui == "Edit"
+                                                else insight["narrative"]
+                                            ),
+                                            "supporting_evidence": (
+                                                supporting_evidence
+                                            ),
+                                        }
+                                    )
+                                    st.session_state[
+                                        "reviewed_insights"
+                                    ] = reviewed_insights
+
                                     evaluated_ids = set(
                                         st.session_state[
                                             "evaluated_insight_ids"
