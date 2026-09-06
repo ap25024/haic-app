@@ -195,10 +195,17 @@ if submit_button:
                     f"Session ID: {storage_result['session_id']}"
                 )
 
-            except Exception as error:
+            except (ValueError, RuntimeError) as error:
                 reset_analysis_state()
                 st.session_state["generation_status"] = "error"
                 st.error(f"The analysis could not be completed: {error}")
+            except Exception:
+                reset_analysis_state()
+                st.session_state["generation_status"] = "error"
+                st.error(
+                    "The analysis could not be completed because of an "
+                    "unexpected error."
+                )
 
 # --- SECTION 2: INSIGHTS DASHBOARD ---
 generation_is_ready = (
