@@ -4,7 +4,7 @@ import groq
 from dotenv import load_dotenv
 
 
-DEFAULT_MODEL = "qwen/qwen3.8-27b"
+MODEL_NAME = "openai/gpt-oss-120b"
 
 INSIGHTS_SCHEMA = {
     "type": "object",
@@ -52,12 +52,11 @@ def fetch_llm_response(prompt: str) -> str:
     if not api_key:
         raise ValueError("No GROQ_API_KEY found. Please check your .env file.")
 
-    model_name = os.getenv("GROQ_MODEL", DEFAULT_MODEL).strip()
     client = groq.Groq(api_key=api_key, max_retries=0, timeout=60.0)
 
     try:
         response = client.chat.completions.create(
-            model=model_name,
+            model=MODEL_NAME,
             messages=[
                 {
                     "role": "system",
@@ -77,7 +76,8 @@ def fetch_llm_response(prompt: str) -> str:
                 },
             },
             temperature=0.7,
-            max_completion_tokens=2000,
+            max_completion_tokens=2048,
+            reasoning_effort="medium"
         )
     except groq.RateLimitError as error:
         raise RuntimeError(
