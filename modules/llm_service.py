@@ -58,13 +58,6 @@ def fetch_llm_response(prompt: str) -> str:
         response = client.chat.completions.create(
             model=MODEL_NAME,
             messages=[
-                {
-                    "role": "system",
-                    "content": (
-                        "You are a Senior Data Analyst. Return only the "
-                        "requested structured JSON response."
-                    ),
-                },
                 {"role": "user", "content": prompt},
             ],
             response_format={
@@ -75,7 +68,7 @@ def fetch_llm_response(prompt: str) -> str:
                     "schema": INSIGHTS_SCHEMA,
                 },
             },
-            temperature=0.7,
+            temperature=0.5,
             max_completion_tokens=2048,
             reasoning_effort="medium"
         )

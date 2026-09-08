@@ -73,7 +73,7 @@ with st.form("context_form"):
     participant_id = st.text_input("Participant ID (For User Study)", placeholder="Example: P001")
     domain = st.selectbox("Domain", ["Technology & Software", "Healthcare & Life Sciences", "Finance & Banking", "E-Commerce & Retail", "Education & EdTech", "Media & Marketing", "Supply Chain & Logistics", "Other"])
     audience = st.selectbox("Target Audience", ["Individual Consumers (B2C)", "Small & Medium Businesses (SMBs)", "Enterprise Companies (B2B)", "Startups & Founders", "Freelancers & Solopreneurs", "Executives & Decision Makers", "Students & Educators", "Government & Non-Profits (B2G)"])
-    goal = st.text_input("What are you looking for?", placeholder="Example: Identify the most important patterns, issues, or areas that need attention in this dataset.")
+    goal = st.text_input("What business question would you like the analysis to answer", placeholder="Examples: Which areas are performing best or worst? Are there unusual patterns that may require attention? Which factors appear most relevant to the business goal?")
     
     submit_button = st.form_submit_button("Generate Insights")
 
