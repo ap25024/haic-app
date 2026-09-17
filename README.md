@@ -2,7 +2,7 @@
 ## Automated Business Insight Generation Using Large Language Models with User-in-the-Loop Evaluation 
 ## Project purpose
 The project explores how large language models can support the interpretation of business data within a workflow that includes human evaluation.
-The application performs predefined calculations and provides their results to the model alongside the user's business context. Users then decide which insights to accept, edit or reject *before viewing a final Reviewed Insight Summary. *. Their decisions determine the content retained in the final summary.
+The application performs predefined calculations and provides their results to the model alongside the user's business context. Users then decide which insights to accept, edit or reject before viewing a final Reviewed Insight Summary. Their decisions determine the content retained in the final summary.
    
 ## Main features
    
@@ -39,7 +39,7 @@ The application performs predefined calculations and provides their results to t
    
 ### Generated insights  
    
-*Each analysis produces three insight types:*  
+Each analysis produces three insight types:  
    
 | Insight type | Focus |  
 | --- | --- |  
